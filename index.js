@@ -6,8 +6,9 @@ const client = new Discord.Client();
 const fs = require("fs");
 const Enmap = require("enmap");
 // client variables
-client.config = config;
 client.commands = new Enmap();
+client.config = config;
+client.discord = Discord;
 
 // get each event from the events folder
 fs.readdir("./events/", (err, files) => {
