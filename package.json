@@ -1,0 +1,24 @@
+{
+  "name": "madlibbot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devmatcha/MadLibBot.git"
+  },
+  "author": "Matcha Latte",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/devmatcha/MadLibBot/issues"
+  },
+  "homepage": "https://github.com/devmatcha/MadLibBot#readme",
+  "dependencies": {
+    "discord.js": "^11.5.1",
+    "enmap": "^5.0.0",
+    "fs": "0.0.1-security"
+  }
+}
