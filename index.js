@@ -9,6 +9,7 @@ const Enmap = require("enmap");
 client.commands = new Enmap();
 client.config = config;
 client.discord = Discord;
+client.fs = fs;
 
 // get each event from the events folder
 fs.readdir("./events/", (err, files) => {
@@ -31,7 +32,9 @@ fs.readdir("./commands/", (err, files) => {
     let cmd = require(`./commands/${file}`);
     let command = file.split(".")[0];
     client.commands.set(command, cmd);
+    console.log(`Loaded ${command}`);
   });
 });
 
 client.login(config.token);
+console.log("Logged on");

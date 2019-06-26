@@ -1,22 +1,23 @@
 exports.run = (client, msg, args) => {
-  let lib;
+
   msg.channel.send("Retrieving a mad lib...")
-  .then(m => {
-    // retrieve templates from the folder
-    const libs = fs.readdirSync("./templates/");
-    let length = libs.length;
-    // get a random mad lib
-    let rng = Math.floor(Math.random() * length);
-    // the actual mad lib
-    lib = libs[rng];
-    m.delete()
-    .then(console.log)
-    .catch(console.error);
-  })
+  .then(console.log("sent"))
   .catch(console.error);
 
+  const libs = client.fs.readdirSync("./templates/");
+  let length = libs.length;
+  // get a random mad lib
+  let rng = Math.floor(Math.random() * length);
+  // the actual mad lib
+  let libPath = `./templates/${libs[rng]}`;
+
+  let lib = client.fs.readFileSync(libPath);
+
+  console.log(typeof(lib));
+
+
   msg.channel.send("Retrieved a Mad Lib template.")
-  .then(console.log)
+  .then(console.log("sent"))
   .catch(console.error);
 
 
@@ -43,31 +44,41 @@ exports.run = (client, msg, args) => {
 
   collector.on("collect", m => {
     // if the user does not confirm the game
-    if (i < 0 && m.content !== "yes") {
-      m.channel.send("Game has been quit");
-      collector.stop();
-    }
-    // if the user does confirm the game
-    else if (i < 0) {
-      i++;
-      m.channel.send(`Please give a **${fillers[i].substring(1, fillers[i].length - 1)}**.`);
-    }
     // if the user forces the game to end
-    else if (m.content === "end") {
-      m.channel.send("Game has been quit");
+    if (m.content === "end") {
+      m.channel.send("Game has been quit")
+      .then(console.log("sent"))
+      .catch(console.error);
       collector.stop();
       forceEnd = true;
     }
-    // if the user plays as normal
-    else if (i < fillers.length) {
-      i++;
-      words.push(m.content);
-      m.channel.send(`Please give a **${fillers[i].substring(1, fillers[i].length - 1)}**.`);
-    }
-    // if the user completes the game
     else {
-      collector.stop();
-      forceEnd = false;
+      if (i < 0 && m.content !== "yes") {
+        m.channel.send("Game has been quit")
+        .then(console.log("sent"))
+        .catch(console.error);
+        collector.stop();
+      }
+      // if the user does confirm the game
+      else if (i < 0 && m.content === null) {
+        i++;
+        m.channel.send(`Please give a **${fillers[i].substring(1, fillers[i].length - 1)}**.`)
+        .then(console.log("sent"))
+        .catch(console.error);
+      }
+      // if the user plays as normal
+      else if (i < fillers.length) {
+        i++;
+        words.push(m.content);
+        m.channel.send(`Please give a **${fillers[i].substring(1, fillers[i].length - 1)}**.`)
+        .then(console.log("sent"))
+        .catch(console.error);
+      }
+      // if the user completes the game
+      else {
+        collector.stop();
+        forceEnd = false;
+      }
     }
   });
 
@@ -83,6 +94,8 @@ exports.run = (client, msg, args) => {
     })
     .catch(console.error);
 
-    msg.channel.send(`Here is your story: /n ${lib}`);
+    msg.channel.send(`Here is your story: \n ${lib}`)
+    .then(console.log("sent"))
+    .catch(console.error);
   }
 }
