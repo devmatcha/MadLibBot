@@ -6,6 +6,7 @@ const client = new Discord.Client();
 const fs = require("fs");
 const Enmap = require("enmap");
 // client variables
+client.color = config.color;
 client.commands = new Enmap();
 client.config = config;
 client.discord = Discord;

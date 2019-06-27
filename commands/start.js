@@ -1,5 +1,17 @@
 exports.run = (client, msg, args) => {
 
+  function embedMsg(msg, footer) {
+    var embed = new client.discord.RichEmbed()
+                .setTitle("Mad Libz!")
+                .setColor(client.color)
+                .setDescription(msg);
+    if (footer) {
+      embed.setFooter("Type \"end\" to end the game at any time");
+    }
+
+    return embed;
+  }
+
   const libs = client.fs.readdirSync("./templates/");
   let length = libs.length;
   // get a random mad lib
@@ -24,7 +36,7 @@ exports.run = (client, msg, args) => {
   // create a new message collector
   var collector = new client.discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, {time: 10000000});
   // start the collector
-  msg.channel.send("Welcome to Mad Libz! Please note that only one person can control the bot at a time. Do you understand? Type \"yes\" to confirm.")
+  msg.channel.send(embedMsg("Welcome to Mad Libz! Please note that only one person can control the bot at a time. Do you understand? Type `yes` to confirm.", true))
   .then(console.log("sent"))
   .catch(console.error);
 
@@ -42,7 +54,7 @@ exports.run = (client, msg, args) => {
     else {
      if (i < 0) {
         i++;
-        m.channel.send(`Please give a **${fillers[i].substring(1, fillers[i].length - 1)}**.`)
+        m.channel.send(embedMsg(`Please give a **${fillers[i].substring(1, fillers[i].length - 1)}**.`, true))
         .then(console.log("sent"))
         .catch(console.error);
       }
@@ -50,7 +62,7 @@ exports.run = (client, msg, args) => {
       else if (i < fillers.length - 1) {
         i++;
         words.push(m.content);
-        m.channel.send(`Please give a **${fillers[i].substring(1, fillers[i].length - 1)}**.`)
+        m.channel.send(embedMsg(`Please give a **${fillers[i].substring(1, fillers[i].length - 1)}**.`, true))
         .then(console.log("sent"))
         .catch(console.error);
       }
@@ -65,13 +77,13 @@ exports.run = (client, msg, args) => {
   // if the game finishes and the user did not force the game to end
   collector.on("end", collected => {
     if (forceEnd) {
-      msg.channel.send("Game has been quit")
+      msg.channel.send(embedMsg("Game has been quit", false))
       .then(console.log("quit game"))
       .catch(console.error);
     }
     else {
       let toDel;
-      msg.channel.send("Okay, generating story...")
+      msg.channel.send(embedMsg("Okay, generating story...", false))
       .then(m => {
         toDel = m;
       })
@@ -81,7 +93,7 @@ exports.run = (client, msg, args) => {
         console.log("looping");
         lib = lib.replace(fillers[i], words[i]);
       }
-      msg.channel.send(`Here is your story: \n ${lib}`)
+      msg.channel.send(embedMsg(`Here is your story: \n ${lib}`, false))
       .then(m => {
         toDel.delete();
       })
