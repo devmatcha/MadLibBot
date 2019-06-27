@@ -36,7 +36,7 @@ exports.run = (client, msg, args) => {
   // create a new message collector
   var collector = new client.discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, {time: 10000000});
   // start the collector
-  msg.channel.send(embedMsg("Welcome to Mad Libz! Please note that only one person can control the bot at a time. Do you understand? Type `yes` to confirm.", true))
+  msg.channel.send(embedMsg("**Welcome to Mad Libz!** Please note that only one person can control the bot at a time. Do you understand? Type `yes` to confirm.", true))
   .then(console.log("sent"))
   .catch(console.error);
 
@@ -59,7 +59,7 @@ exports.run = (client, msg, args) => {
         .catch(console.error);
       }
       // if the user plays as normal
-      else if (i < fillers.length - 1) {
+      else if (i < fillers.length) {
         i++;
         words.push(m.content);
         m.channel.send(embedMsg(`Please give a **${fillers[i].substring(1, fillers[i].length - 1)}**.`, true))
@@ -90,7 +90,6 @@ exports.run = (client, msg, args) => {
       .catch(console.error);
       console.log("fillers: ", fillers);
       for (var i = 0; i < fillers.length; i++) {
-        console.log("looping");
         lib = lib.replace(fillers[i], words[i]);
       }
       msg.channel.send(embedMsg(`Here is your story: \n ${lib}`, false))
